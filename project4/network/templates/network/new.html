@@ -1,0 +1,19 @@
+{% extends 'network/layout.html' %} {% block title %}New post {% endblock title %} {% block body %}
+<div class="row">
+    <div class="col-md-10 col-lg-7 offset-lg-2 mx-md-auto p-5">
+        <form role='form' method="post" action="{% url 'new' %}" class="my-5" py-5>
+            {% csrf_token %}
+            <input type="hidden" name="username" value="{{user.username}}">
+            <div class="form-group">
+                <textarea name="msg" class="form-control" placeholder="............." style="max-height: 10em;height: 3em;max-width: 80%;border-radius: 1em;font-family: cursive;"></textarea>
+                <button type="submit" class="btn btn-outline-success fa-send pull-right p-3">:></button>
+            </div>
+        </form>
+        {% if msg %}
+        <div class="alert-dismissible p-4">
+            {{msg}}
+        </div>
+        {% endif %}
+    </div>
+</div>
+{% endblock body %}

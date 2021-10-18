@@ -1,0 +1,57 @@
+{% extends "network/layout.html" %} {% block body %}
+
+<div class="row">
+    <div class="col-lg-6 col-md-8 align-content-center offset-lg-3">
+        <h1 class="display-4 text-center">Posts of all the people you follow</h1>
+        <ul class="list-group">
+            {% for post in posts %}
+            <li class="list-group-item m-3">
+                <div class="card" id="{{post.id}}">
+                    <div class="card-header bg-dark">
+                        <h5>
+                            <a href="{% url 'profile' %}?username={{post.user.username}}" class="btn btn-outline-light">{{post.user.username}}</a>
+                            <small class="pull-right text-secondary mx-2 p-2">dislikes: <span id="dislikes{{post.id}}">{{post.dislikes}}</span></small>
+                            <small class="pull-right text-danger mx-2 p-2">likes: <span id="likes{{post.id}}">{{post.likes}}</span></small>
+                        </h5>
+                    </div>
+                    <div class="card-body">
+                        <div class="card-text">
+                            {{post.msg}}
+                            <span class="text-black-50 pull-right">@{{post.timestamp}}</span>
+                        </div>
+                    </div>
+                    <div class="card-footer d-inline-flex">
+                        {% if post.user.username != user.username %}
+                        <div class="btn-block" id="opinion{{post.id}}">
+                            <button class="btn btn-outline-success float-right" onclick="javascript: like_post('{{ post.id }}')">Like <i class="fa fa-thumbs-o-up"></i></button>
+                            <button class="btn btn-outline-dark float-right" onclick="javascript: dislike_post('{{ post.id }}')">Dislike <i class="fa fa-thumbs-o-down"></i></button> {% endif %}
+                        </div>
+                    </div>
+                </div>
+            </li>
+            {% empty %}
+            <li class="list-group-item-info">
+                Sorry there appears to be no posts available!!!
+            </li>
+            {% endfor %}
+        </ul>
+        <ul class="pagination">
+            {% if posts.has_previous %}
+            <li class="mx-sm-auto mx-md-3">
+                <a href="?page=1" class="mx-md-2">&laquo; first</a>
+                <a href="?page={{ posts.previous_page_number }}" class="mx-md-2">previous</a>
+            </li>
+            {% endif %}
+            <li class="active mx-md-3 px-2">
+                page {{ posts.number }} of {{ posts.paginator.num_pages }}
+            </li>
+            {% if posts.has_next %}
+            <li class="mx-sm-auto mx-md-3">
+                <a href="?page={{ posts.next_page_number }}" class="mx-md-2">next</a>
+                <a href="?page={{ posts.paginator.num_pages }}" class="mx-md-2">&raquo; last</a>
+            </li>
+            {% endif %}
+        </ul>
+    </div>
+</div>
+{% endblock %}
